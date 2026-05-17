@@ -4,6 +4,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     unzip \
     sqlite3 \
+    libsqlite3-dev \
     nodejs \
     npm \
     && docker-php-ext-install pdo pdo_sqlite \
