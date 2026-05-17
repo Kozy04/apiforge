@@ -17,14 +17,12 @@ WORKDIR /app
 COPY . .
 
 RUN cp .env.example .env \
-    && php artisan key:generate --force \
     && composer install --no-dev --optimize-autoloader \
+    && php artisan key:generate --force \
     && npm ci \
     && npm run build \
     && php artisan migrate --force \
-    && php artisan db:seed --force \
-    && php artisan app:generate-sitemap \
-    && php artisan app:generate-llms-txt
+    && php artisan db:seed --force
 
 EXPOSE 8000
 
