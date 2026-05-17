@@ -34,7 +34,7 @@ services:
     env: python
     buildCommand: pip install -r scraper/requirements.txt
     schedule: "0 6 * * *"
-    runCommand: python scraper/blog_scraper.py
+    startCommand: python scraper/blog_scraper.py
     envVars:
       - key: APIFORGE_API_KEY
         value: apiforge-prod-key-2025
@@ -46,7 +46,7 @@ services:
     env: python
     buildCommand: pip install -r scraper/requirements.txt
     schedule: "0 3 * * 0"
-    runCommand: python scraper/scraper.py
+    startCommand: python scraper/scraper.py
     envVars:
       - key: APIFORGE_API_KEY
         value: apiforge-prod-key-2025
