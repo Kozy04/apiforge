@@ -7,14 +7,28 @@ services:
     envVars:
       - key: APP_ENV
         value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_NAME
+        value: APIForge
       - key: APP_URL
         value: https://apiforge.onrender.com
       - key: APP_KEY
         generateValue: true
       - key: SCRAPER_API_KEY
         generateValue: true
+      - key: ADMIN_PASSWORD
+        generateValue: true
       - key: DB_CONNECTION
         value: sqlite
+      - key: SESSION_DRIVER
+        value: database
+      - key: CACHE_STORE
+        value: database
+      - key: LOG_CHANNEL
+        value: stack
+      - key: LOG_LEVEL
+        value: error
     plan: free
 
   - type: cron
@@ -31,4 +45,20 @@ services:
           envVar: SCRAPER_API_KEY
       - key: APIFORGE_BLOG_WEBHOOK
         value: https://apiforge.onrender.com/api/blog-posts
+    plan: free
+
+  - type: cron
+    name: price-scraper
+    env: python
+    buildCommand: pip install -r scraper/requirements.txt
+    startCommand: python scraper/scraper.py
+    schedule: "0 3 * * 0"
+    envVars:
+      - key: APIFORGE_API_KEY
+        fromService:
+          name: apiforge
+          type: web
+          envVar: SCRAPER_API_KEY
+      - key: APIFORGE_WEBHOOK_URL
+        value: https://apiforge.onrender.com/api/update-prices
     plan: free
