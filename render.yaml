@@ -28,7 +28,6 @@ services:
         value: stack
       - key: LOG_LEVEL
         value: error
-    plan: free
 
   - type: cron
     name: blog-scraper
