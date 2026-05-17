@@ -1,0 +1,34 @@
+services:
+  - type: web
+    name: apiforge
+    env: php
+    buildCommand: composer install --no-dev --optimize-autoloader && npm ci && npm run build
+    startCommand: php artisan serve --host=0.0.0.0 --port=$PORT
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_URL
+        value: https://apiforge.onrender.com
+      - key: APP_KEY
+        generateValue: true
+      - key: SCRAPER_API_KEY
+        generateValue: true
+      - key: DB_CONNECTION
+        value: sqlite
+    plan: free
+
+  - type: cron
+    name: blog-scraper
+    env: python
+    buildCommand: pip install -r scraper/requirements.txt
+    startCommand: python scraper/blog_scraper.py
+    schedule: "0 6 * * *"
+    envVars:
+      - key: APIFORGE_API_KEY
+        fromService:
+          name: apiforge
+          type: web
+          envVar: SCRAPER_API_KEY
+      - key: APIFORGE_BLOG_WEBHOOK
+        value: https://apiforge.onrender.com/api/blog-posts
+    plan: free

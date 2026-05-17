@@ -1,0 +1,41 @@
+{
+  "sources": [
+    {
+      "provider": "openai",
+      "url": "https://platform.openai.com/docs/models",
+      "type": "scrape",
+      "selectors": {
+        "table": ".pricing-table",
+        "row": "tr",
+        "name": "td:first-child",
+        "input_cost": "td:nth-child(2)",
+        "output_cost": "td:nth-child(3)"
+      }
+    },
+    {
+      "provider": "anthropic",
+      "url": "https://docs.anthropic.com/en/docs/about-claude/models",
+      "type": "scrape"
+    },
+    {
+      "provider": "google",
+      "url": "https://ai.google.dev/pricing",
+      "type": "scrape"
+    },
+    {
+      "provider": "groq",
+      "url": "https://console.groq.com/docs/models",
+      "type": "scrape"
+    },
+    {
+      "provider": "deepseek",
+      "url": "https://platform.deepseek.com/api-docs/pricing",
+      "type": "scrape"
+    },
+    {
+      "provider": "mistral",
+      "url": "https://docs.mistral.ai/deployment/cloud/pricing/",
+      "type": "scrape"
+    }
+  ]
+}
