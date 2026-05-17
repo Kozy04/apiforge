@@ -6,6 +6,7 @@ RUN apt-get update && apt-get install -y \
     sqlite3 \
     nodejs \
     npm \
+    && docker-php-ext-install pdo pdo_sqlite \
     && rm -rf /var/lib/apt/lists/*
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -14,15 +15,13 @@ WORKDIR /app
 
 COPY . .
 
-RUN composer install --no-dev --optimize-autoloader \
+RUN cp .env.example .env \
+    && php artisan key:generate --force \
+    && composer install --no-dev --optimize-autoloader \
     && npm ci \
     && npm run build \
-    && php artisan key:generate --force \
     && php artisan migrate --force \
     && php artisan db:seed --force \
-    && php artisan config:cache \
-    && php artisan route:cache \
-    && php artisan view:cache \
     && php artisan app:generate-sitemap \
     && php artisan app:generate-llms-txt
 
