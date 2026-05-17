@@ -9,6 +9,12 @@
     <link rel="canonical" href="@yield('canonical', url()->current())">
     <link rel="icon" href="{{ asset('favicon.ico') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @php
+    $schemaFile = public_path('schema-index.json');
+    @endphp
+    @if(file_exists($schemaFile))
+    <script type="application/ld+json">{!! file_get_contents($schemaFile) !!}</script>
+    @endif
     @stack('head')
 </head>
 <body class="bg-gray-950 text-gray-100 antialiased">

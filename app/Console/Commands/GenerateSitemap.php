@@ -58,6 +58,37 @@ class GenerateSitemap extends Command
 
         $sitemap->writeToFile(public_path('sitemap.xml'));
 
+        $items = [];
+        foreach ($models as $i => $model) {
+            $items[] = [
+                '@type' => 'ListItem',
+                'position' => $i + 1,
+                'item' => [
+                    '@type' => 'SoftwareApplication',
+                    'name' => $model->name,
+                    'url' => route('model.show', $model),
+                    'offers' => [
+                        '@type' => 'Offer',
+                        'price' => (string) $model->input_cost_per_m,
+                        'priceCurrency' => 'USD',
+                        'unitText' => 'per 1M input tokens',
+                    ],
+                    'provider' => [
+                        '@type' => 'Organization',
+                        'name' => $model->provider->name,
+                    ],
+                ],
+            ];
+        }
+        $json = json_encode([
+            '@context' => 'https://schema.org',
+            '@type' => 'ItemList',
+            'name' => 'AI Model API Pricing Directory',
+            'numberOfItems' => $models->count(),
+            'itemListElement' => $items,
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+        file_put_contents(public_path('schema-index.json'), $json);
+
         $blogCount = BlogPost::published()->count();
         $this->info('Sitemap generated: ' . public_path('sitemap.xml'));
         $this->info("Pages: 1 home + {$count} models + " . ($count * ($count - 1) / 2) . " comparisons + {$blogCount} blog");

@@ -3,10 +3,6 @@
 @section('title', 'AI Model API Pricing — Live Cost Calculator')
 @section('meta_desc', 'Browse and compare pricing for every major AI model API: OpenAI, Anthropic, Google Gemini, Groq, Mistral, DeepSeek, and more.')
 
-@push('head')
-    @include('partials.schema-index')
-@endpush
-
 @section('content')
 <section class="mx-auto max-w-7xl px-4 py-12 sm:px-6">
     <div class="mb-10 text-center">
