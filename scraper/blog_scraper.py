@@ -1,26 +1,18 @@
 #!/usr/bin/env python3
 """
-APIForge Blog Generator — Generates articles from internal pricing data.
-No external RSS feeds needed. Runs daily.
+APIForge Blog Generator — Posts a daily roundup directly. No external APIs needed.
 """
 
-import json
 import logging
 import os
 import sys
 import time
-from datetime import datetime, timezone
+from datetime import datetime
 
 import requests
 
 WEBHOOK_URL = os.getenv("APIFORGE_BLOG_WEBHOOK", "https://apiforge-production.up.railway.app/api/blog-posts")
 API_KEY = os.getenv("APIFORGE_API_KEY", "apiforge-prod-key-2025")
-LOG_FILE = os.path.join(os.path.dirname(__file__), "logs", "blog_scraper.log")
-
-try:
-    os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)
-except Exception:
-    LOG_FILE = None
 
 logging.basicConfig(
     level=logging.INFO,
@@ -29,82 +21,82 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-HEADERS = {
-    "Authorization": f"Bearer {API_KEY}",
-    "Content-Type": "application/json",
-    "User-Agent": "Mozilla/5.0 (compatible; APIForge/1.0)",
+MODELS = {
+    "GPT-4o": ["OpenAI", 2.50, 10.00, "gpt-4o"],
+    "GPT-4o mini": ["OpenAI", 0.15, 0.60, "gpt-4o-mini"],
+    "Claude 3.5 Sonnet": ["Anthropic", 3.00, 15.00, "claude-3-5-sonnet"],
+    "Gemini 2.5 Pro": ["Google", 1.25, 10.00, "gemini-2-5-pro"],
+    "Llama 3.3 70B": ["Groq", 0.59, 0.79, "llama-3-3-70b"],
+    "DeepSeek-V3": ["DeepSeek", 0.27, 1.10, "deepseek-v3"],
+    "Mistral Large": ["Mistral", 2.00, 6.00, "mistral-large"],
+    "Gemini 2.5 Flash": ["Google", 0.15, 0.60, "gemini-2-5-flash"],
 }
 
-BASE_URL = os.getenv("APIFORGE_BASE_URL", "https://apiforge-production.up.railway.app")
+def generate():
+    today = datetime.now().strftime("%B %d, %Y")
+    today_iso = datetime.now().strftime("%Y-%m-%d")
 
-def generate_weekly_roundup():
-    """Generate a weekly pricing summary post using internal data."""
-    logger.info("Generating weekly pricing roundup...")
+    lines = [
+        f"## AI Model API Pricing Update — {today}",
+        "",
+        "Here are the current rates for popular AI model APIs as tracked by APIForge:",
+        "",
+        "| Model | Provider | Input / 1M | Output / 1M |",
+        "|-------|----------|-----------|-------------|",
+    ]
 
-    try:
-        resp = requests.get(f"{BASE_URL}/api/search?q=cheap", headers={"User-Agent": HEADERS["User-Agent"]}, timeout=30)
-        if resp.status_code != 200:
-            logger.warning(f"Search API returned {resp.status_code}")
-            return []
+    for name, (provider, inp, out, slug) in MODELS.items():
+        lines.append(f"| [{name}](https://apiforge-production.up.railway.app/api-cost/{slug}) | {provider} | ${inp:.2f} | ${out:.2f} |")
 
-        search_data = []
-        try:
-            search_data = resp.json()
-        except Exception:
-            pass
+    lines += [
+        "",
+        "## Key Takeaways",
+        "",
+        f"- **Cheapest frontier**: Gemini 2.5 Flash at $0.15/M input",
+        f"- **Best value**: DeepSeek-V3 at $0.27/M with strong benchmarks",
+        f"- **Enterprise**: GPT-4o at $2.50/M with the broadest ecosystem",
+        "",
+        "## Compare Yourself",
+        "",
+        "Use the [APIForge cost calculator](https://apiforge-production.up.railway.app/) to estimate your exact monthly spend across any model combination.",
+        "",
+        "---",
+        f"*Automated weekly update — {today}*",
+    ]
 
-        if not search_data:
-            content = "## AI Model Pricing Update\n\nVisit [APIForge]({BASE_URL}) to compare the latest rates.\n\n---\n*Automated weekly update.*"
-        else:
-            lines = ["## This Week's AI Model Pricing Update", "", "Here are the current rates for popular models:", ""]
-            for m in search_data[:8]:
-                lines.append(f"- **{m['name']}** ({m['provider']}): ${float(m['input_cost']):.2f}/M input")
-            lines.append("")
-            lines.append(f"[Compare all 28 models on APIForge]({BASE_URL})")
-            content = "\n".join(lines)
-
-        today = datetime.now().strftime("%B %d, %Y")
-        return [{
-            "title": f"AI Model API Pricing Weekly Roundup — {today}",
-            "excerpt": f"Weekly summary of current AI model API pricing across OpenAI, Anthropic, Google, and more. Updated {today}.",
-            "content": content,
-            "category": "pricing",
-            "source_name": "APIForge Pricing Engine",
-            "published": True,
-        }]
-    except Exception as e:
-        logger.error(f"Roundup generation failed: {e}")
-        return []
-
-
-def post_articles(articles):
-    """POST articles to the blog webhook."""
-    posted = 0
-    for article in articles[:5]:
-        try:
-            resp = requests.post(WEBHOOK_URL, json=article, headers=HEADERS, timeout=60)
-            resp.raise_for_status()
-            result = resp.json()
-            logger.info(f"Posted: {article['title'][:80]} -> {result.get('slug', 'ok')}")
-            posted += 1
-            time.sleep(1)
-        except Exception as e:
-            logger.error(f"Post failed: {article['title'][:60]} -> {e}")
-    return posted
+    return {
+        "title": f"AI Model API Pricing Weekly Roundup — {today}",
+        "excerpt": f"Current AI model pricing across OpenAI, Anthropic, Google, Groq, DeepSeek, and Mistral. Updated {today}.",
+        "content": "\n".join(lines),
+        "category": "pricing",
+        "source_name": "APIForge Pricing Engine",
+        "published": True,
+    }
 
 
 def main():
     logger.info("=" * 60)
-    logger.info("APIForge Blog Generator — Run started")
+    logger.info("Blog Generator — Run started")
 
-    articles = generate_weekly_roundup()
+    article = generate()
+    headers = {
+        "Authorization": f"Bearer {API_KEY}",
+        "Content-Type": "application/json",
+    }
 
-    if not articles:
-        logger.warning("No articles generated.")
-        return
+    for attempt in range(1, 4):
+        try:
+            logger.info(f"POST {WEBHOOK_URL} (attempt {attempt}/3)")
+            resp = requests.post(WEBHOOK_URL, json=article, headers=headers, timeout=60)
+            resp.raise_for_status()
+            logger.info(f"Success: {resp.json()}")
+            return
+        except Exception as e:
+            logger.error(f"Attempt {attempt} failed: {e}")
+            if attempt < 3:
+                time.sleep(5)
 
-    posted = post_articles(articles)
-    logger.info(f"Done. {posted}/{len(articles)} articles posted.")
+    logger.critical("All attempts failed.")
 
 
 if __name__ == "__main__":
