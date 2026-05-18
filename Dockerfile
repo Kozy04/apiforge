@@ -17,7 +17,7 @@ RUN cp .env.example .env \
     && composer install --no-dev --optimize-autoloader \
     && php artisan key:generate --force \
     && npm ci && npm run build \
-    && pip install -r scraper/requirements.txt \
+    && pip install --break-system-packages -r scraper/requirements.txt \
     && php artisan migrate --force \
     && php artisan db:seed --force
 
@@ -26,3 +26,4 @@ RUN php artisan app:generate-sitemap && php artisan app:generate-llms-txt
 EXPOSE 8000
 
 CMD php artisan serve --host=0.0.0.0 --port=${PORT:-8000}
+
