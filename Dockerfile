@@ -2,7 +2,9 @@ FROM php:8.2-cli
 
 RUN apt-get update && apt-get install -y \
     curl unzip sqlite3 libsqlite3-dev nodejs npm \
+    python3 python3-pip python3-venv \
     && docker-php-ext-install pdo pdo_sqlite \
+    && ln -s /usr/bin/python3 /usr/local/bin/python \
     && rm -rf /var/lib/apt/lists/*
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -10,6 +12,8 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 WORKDIR /app
 
 COPY . .
+
+RUN pip3 install --no-cache-dir --break-system-packages -r scraper/requirements.txt
 
 RUN cp .env.example .env \
     && composer install --no-dev --optimize-autoloader \
