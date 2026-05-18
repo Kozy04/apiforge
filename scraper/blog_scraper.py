@@ -17,9 +17,9 @@ import requests
 
 # ─── Configuration ───────────────────────────────────────────────────────────
 
-WEBHOOK_URL = os.getenv("APIFORGE_BLOG_WEBHOOK", "http://localhost:8000/api/blog-posts")
-API_KEY = os.getenv("APIFORGE_API_KEY", "apiforge-secret-key-change-in-production")
-PRICES_WEBHOOK = os.getenv("APIFORGE_WEBHOOK_URL", "http://localhost:8000/api/update-prices")
+WEBHOOK_URL = os.getenv("APIFORGE_BLOG_WEBHOOK", "https://apiforge-production.up.railway.app/api/blog-posts")
+API_KEY = os.getenv("APIFORGE_API_KEY", "apiforge-prod-key-2025")
+PRICES_WEBHOOK = os.getenv("APIFORGE_WEBHOOK_URL", "https://apiforge-production.up.railway.app/api/update-prices")
 LOG_FILE = os.path.join(os.path.dirname(__file__), "logs", "blog_scraper.log")
 
 try:
@@ -38,16 +38,16 @@ logger = logging.getLogger(__name__)
 
 RSS_FEEDS = [
     {
-        "url": "https://feeds.feedburner.com/TheAIGrid",
-        "source_name": "The AI Grid",
-    },
-    {
         "url": "https://www.artificialintelligence-news.com/feed/",
         "source_name": "AI News",
     },
     {
-        "url": "https://www.marktechpost.com/feed/",
-        "source_name": "MarkTechPost",
+        "url": "https://venturebeat.com/category/ai/feed/",
+        "source_name": "VentureBeat AI",
+    },
+    {
+        "url": "https://syncedreview.com/feed/",
+        "source_name": "Synced",
     },
 ]
 
@@ -106,7 +106,7 @@ def fetch_rss_articles():
     for feed in RSS_FEEDS:
         try:
             logger.info(f"Fetching RSS: {feed['url']}")
-            resp = requests.get(feed["url"], timeout=30, headers={"User-Agent": "APIForge-Blog/1.0"})
+            resp = requests.get(feed["url"], timeout=30, headers={"User-Agent": "Mozilla/5.0 (compatible; APIForge/1.0; +https://apiforge-production.up.railway.app)"})
             resp.raise_for_status()
 
             root = ET.fromstring(resp.content)

@@ -17,8 +17,8 @@ from bs4 import BeautifulSoup
 
 # ─── Configuration ───────────────────────────────────────────────────────────
 
-WEBHOOK_URL = os.getenv("APIFORGE_WEBHOOK_URL", "http://localhost:8000/api/update-prices")
-API_KEY = os.getenv("APIFORGE_API_KEY", "apiforge-secret-key-change-in-production")
+WEBHOOK_URL = os.getenv("APIFORGE_WEBHOOK_URL", "https://apiforge-production.up.railway.app/api/update-prices")
+API_KEY = os.getenv("APIFORGE_API_KEY", "apiforge-prod-key-2025")
 SOURCES_FILE = os.path.join(os.path.dirname(__file__), "sources.json")
 LOG_FILE = os.path.join(os.path.dirname(__file__), "logs", "scraper.log")
 
