@@ -22,13 +22,16 @@ API_KEY = os.getenv("APIFORGE_API_KEY", "apiforge-secret-key-change-in-productio
 SOURCES_FILE = os.path.join(os.path.dirname(__file__), "sources.json")
 LOG_FILE = os.path.join(os.path.dirname(__file__), "logs", "scraper.log")
 
-os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)
+try:
+    os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)
+except Exception:
+    LOG_FILE = None
 
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
     handlers=[
-        logging.FileHandler(LOG_FILE),
+        logging.FileHandler(LOG_FILE) if LOG_FILE else logging.NullHandler(),
         logging.StreamHandler(sys.stdout),
     ],
 )

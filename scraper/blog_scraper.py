@@ -22,12 +22,15 @@ API_KEY = os.getenv("APIFORGE_API_KEY", "apiforge-secret-key-change-in-productio
 PRICES_WEBHOOK = os.getenv("APIFORGE_WEBHOOK_URL", "http://localhost:8000/api/update-prices")
 LOG_FILE = os.path.join(os.path.dirname(__file__), "logs", "blog_scraper.log")
 
-os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)
+try:
+    os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)
+except Exception:
+    LOG_FILE = None
 
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
-    handlers=[logging.FileHandler(LOG_FILE), logging.StreamHandler(sys.stdout)],
+    handlers=[logging.StreamHandler(sys.stdout)],
 )
 logger = logging.getLogger(__name__)
 
