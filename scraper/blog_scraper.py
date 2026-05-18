@@ -35,8 +35,9 @@ AUTH_HEADERS = {
 BASE = "https://apiforge-production.up.railway.app"
 
 RSS_FEEDS = [
-    {"url": "https://www.artificialintelligence-news.com/feed/", "source_name": "AI News"},
-    {"url": "https://www.marktechpost.com/feed/", "source_name": "MarkTechPost"},
+    {"url": "https://syncedreview.com/feed/", "source_name": "Synced"},
+    {"url": "https://www.unite.ai/feed/", "source_name": "Unite.AI"},
+    {"url": "https://aibusiness.com/feed/", "source_name": "AI Business"},
 ]
 
 
