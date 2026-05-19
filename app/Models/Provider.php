@@ -8,6 +8,11 @@ class Provider extends Model
 {
     protected $fillable = ['name', 'slug', 'affiliate_url'];
 
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+
     public function apiModels()
     {
         return $this->hasMany(ApiModel::class);
