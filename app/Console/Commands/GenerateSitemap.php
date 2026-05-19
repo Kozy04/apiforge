@@ -45,6 +45,16 @@ class GenerateSitemap extends Command
             }
         }
 
+        $sitemap->add(Url::create(route('provider.index'))
+            ->setPriority(0.9)
+            ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY));
+
+        foreach (\App\Models\Provider::all() as $provider) {
+            $sitemap->add(Url::create(route('provider.show', $provider))
+                ->setPriority(0.8)
+                ->setChangeFrequency(Url::CHANGE_FREQUENCY_WEEKLY));
+        }
+
         $sitemap->add(Url::create(route('blog.index'))
             ->setPriority(0.9)
             ->setChangeFrequency(Url::CHANGE_FREQUENCY_DAILY));

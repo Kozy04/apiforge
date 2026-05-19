@@ -29,4 +29,33 @@ class ApiModel extends Model
     {
         return 'slug';
     }
+
+    public function getTagsAttribute(): array
+    {
+        $tags = [];
+        if ($this->input_cost_per_m < 0.50) $tags[] = 'Budget Pick';
+        elseif ($this->input_cost_per_m < 2) $tags[] = 'Value';
+        elseif ($this->input_cost_per_m > 5) $tags[] = 'Enterprise';
+
+        if ($this->context_window >= 500000) $tags[] = 'Long Context';
+        elseif ($this->context_window >= 128000) $tags[] = 'Large Context';
+
+        if ($this->latency_score < 0.5) $tags[] = 'Fast';
+
+        $ratio = $this->input_cost_per_m > 0 ? $this->output_cost_per_m / $this->input_cost_per_m : 99;
+        if ($ratio <= 2.5) $tags[] = 'Efficient Output';
+
+        return $tags;
+    }
+
+    public function isRecentlyUpdated(): bool
+    {
+        return $this->last_updated && $this->last_updated->diffInDays(now()) <= 7;
+    }
+
+    public function monthlyEstimate(int $tokens = 5000000): float
+    {
+        return ($tokens * 0.7 / 1_000_000 * $this->input_cost_per_m)
+             + ($tokens * 0.3 / 1_000_000 * $this->output_cost_per_m);
+    }
 }

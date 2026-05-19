@@ -27,7 +27,28 @@
         </p>
         <p class="mt-1 text-sm text-gray-500">
             Last updated: {{ $model->last_updated ? $model->last_updated->format('M d, Y') : 'N/A' }}
+            @if($model->isRecentlyUpdated())
+                <span class="ml-2 inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-xs text-emerald-400">
+                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span> Recently updated
+                </span>
+            @endif
         </p>
+        @php $tags = $model->tags; @endphp
+        @if(count($tags))
+        <div class="mt-3 flex flex-wrap gap-1.5">
+            @foreach($tags as $tag)
+                <span class="rounded-full bg-gray-800 px-2.5 py-0.5 text-xs font-medium
+                    {{ str_contains($tag, 'Budget') ? 'text-yellow-400 bg-yellow-500/10' : '' }}
+                    {{ str_contains($tag, 'Fast') ? 'text-purple-400 bg-purple-500/10' : '' }}
+                    {{ str_contains($tag, 'Enterprise') ? 'text-red-400 bg-red-500/10' : '' }}
+                    {{ str_contains($tag, 'Context') ? 'text-blue-400 bg-blue-500/10' : '' }}
+                    {{ str_contains($tag, 'Efficient') ? 'text-emerald-400 bg-emerald-500/10' : '' }}
+                    {{ str_contains($tag, 'Value') ? 'text-orange-400 bg-orange-500/10' : '' }}">
+                    {{ $tag }}
+                </span>
+            @endforeach
+        </div>
+        @endif
     </div>
 
     <div class="grid gap-6 md:grid-cols-2 mb-8">
