@@ -40,9 +40,9 @@ def fetch_openrouter():
         })
         r.raise_for_status()
         data = r.json()
-
         models = []
-        for m in data:
+
+        for m in data.get("data", data if isinstance(data, list) else []):
             name = m.get("name", "") or m.get("id", "")
             or_id = m.get("id", "")
 
