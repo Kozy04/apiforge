@@ -27,7 +27,6 @@ AUTH = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"
 RSS_FEEDS = [
     {"url": "https://syncedreview.com/feed/", "source_name": "Synced"},
     {"url": "https://www.unite.ai/feed/", "source_name": "Unite.AI"},
-    {"url": "https://aibusiness.com/feed/", "source_name": "AI Business"},
 ]
 
 PRICING_DATA = {
@@ -53,7 +52,8 @@ def fetch_rss():
         try:
             resp = requests.get(feed["url"], timeout=30, headers=UA)
             resp.raise_for_status()
-            root = ET.fromstring(resp.content)
+            xml_text = resp.text.strip()
+            root = ET.fromstring(xml_text)
             ns = _ns(root)
             channel = root if root.tag.endswith("channel") else root.find(".//channel", ns) or root
             items = channel.findall("item") if ns else channel.findall(".//item")
