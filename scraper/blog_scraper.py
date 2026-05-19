@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-APIForge Blog Generator — Deep, detailed articles from RSS + internal data.
-Runs daily. Falls back to comprehensive pricing analysis if RSS fails.
+APIForge Blog Generator — NewsAPI (primary) + RSS (fallback) + pricing roundup.
+Runs daily. Requires NEWSAPI_KEY env var (free at newsapi.org).
 """
 
 import logging
@@ -16,6 +16,7 @@ import requests
 
 WEBHOOK = os.getenv("APIFORGE_BLOG_WEBHOOK", "https://apiforge-production.up.railway.app/api/blog-posts")
 API_KEY = os.getenv("APIFORGE_API_KEY", "apiforge-prod-key-2025")
+NEWSAPI_KEY = os.getenv("NEWSAPI_KEY", "")
 BASE = "https://apiforge-production.up.railway.app"
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s", handlers=[logging.StreamHandler(sys.stdout)])
@@ -23,6 +24,12 @@ logger = logging.getLogger(__name__)
 
 UA = {"User-Agent": "Mozilla/5.0 (compatible; APIForge/1.0)"}
 AUTH = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
+
+NEWSAPI_QUERIES = [
+    "artificial intelligence API pricing",
+    "LLM model launch",
+    "AI startup funding",
+]
 
 RSS_FEEDS = [
     {"url": "https://syncedreview.com/feed/", "source_name": "Synced"},
@@ -44,6 +51,52 @@ PRICING_DATA = {
     "Mistral Large":    ["Mistral",  2.00, 6.00,  128000,  "mistral-large"],
     "Mistral Small":    ["Mistral",  0.20, 0.60,  32000,   "mistral-small"],
 }
+
+
+def fetch_newsapi():
+    """Fetch AI articles from NewsAPI.org — clean JSON, no XML parsing."""
+    if not NEWSAPI_KEY:
+        logger.info("NEWSAPI_KEY not set. Skipping NewsAPI.")
+        return []
+
+    articles = []
+    for query in NEWSAPI_QUERIES:
+        try:
+            url = "https://newsapi.org/v2/everything"
+            params = {
+                "q": query,
+                "language": "en",
+                "sortBy": "publishedAt",
+                "pageSize": 3,
+                "apiKey": NEWSAPI_KEY,
+            }
+            r = requests.get(url, params=params, headers=UA, timeout=30)
+            r.raise_for_status()
+            data = r.json()
+            if data.get("status") != "ok":
+                logger.warning(f"NewsAPI status: {data.get('status')} - {data.get('message', '')}")
+                continue
+
+            for item in data.get("articles", []):
+                title = item.get("title", "")
+                desc = item.get("description") or ""
+                if not title or len(title) < 15:
+                    continue
+                source = item.get("source", {}).get("name", "NewsAPI")
+                link = item.get("url", "")
+                articles.append({
+                    "title": _cln(title),
+                    "description": _cln(desc),
+                    "link": link,
+                    "source_name": source,
+                })
+
+            logger.info(f"  NewsAPI '{query}': got {len(data.get('articles', []))} articles")
+        except Exception as e:
+            logger.error(f"NewsAPI failed for '{query}': {e}")
+        time.sleep(1)
+
+    return articles
 
 
 def fetch_rss():
@@ -359,10 +412,19 @@ def main():
     logger.info("=" * 60)
     logger.info("Blog Generator — Run started")
 
-    articles = [generate_news(item) for item in fetch_rss()]
+    articles = []
+
+    newsapi_items = fetch_newsapi()
+    for item in newsapi_items:
+        articles.append(generate_news(item))
 
     if not articles:
-        logger.info("No RSS articles. Generating weekly roundup.")
+        logger.info("No NewsAPI articles. Trying RSS feeds...")
+        for item in fetch_rss():
+            articles.append(generate_news(item))
+
+    if not articles:
+        logger.info("No RSS articles either. Generating weekly roundup.")
         articles = [generate_roundup()]
 
     posted = post(articles)
