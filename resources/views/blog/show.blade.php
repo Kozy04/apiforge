@@ -110,6 +110,16 @@ $relatedPosts = \App\Models\BlogPost::published()
                 {!! $post->renderedContent() !!}
             </div>
 
+            @production
+            @if(env('CARBON_ADS_ID'))
+            <div class="mt-8 rounded-xl border border-gray-800 bg-gray-900/20 p-4 text-center">
+                <p class="text-[10px] text-gray-600 uppercase tracking-widest mb-2">Sponsored</p>
+                <script async src="//cdn.carbonads.com/carbon.js?serve={{ env('CARBON_ADS_ID') }}&placement={{ parse_url(config('app.url'), PHP_URL_HOST) }}blog" id="_carbonads_js_blog"></script>
+                <div class="min-h-[90px] flex items-center justify-center text-xs text-gray-600">Loading...</div>
+            </div>
+            @endif
+            @endproduction
+
             <div class="mt-10 rounded-xl border border-emerald-500/20 bg-gradient-to-r from-emerald-500/5 to-gray-900 p-6 sm:p-8">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div>
