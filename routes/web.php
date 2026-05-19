@@ -10,6 +10,8 @@ use App\Http\Controllers\TrackClickController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [ModelController::class, 'index']);
+Route::get('/category/{category}', [ModelController::class, 'index'])->name('category.show')
+    ->where('category', 'text|image|video|audio|embedding|open-source');
 
 Route::get('/api-cost/{slug}', [ModelController::class, 'show'])->name('model.show');
 

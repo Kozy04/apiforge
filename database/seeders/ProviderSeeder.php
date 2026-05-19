@@ -20,6 +20,12 @@ class ProviderSeeder extends Seeder
             ['name' => 'Cohere',       'slug' => 'cohere',       'affiliate_url' => 'https://dashboard.cohere.com/'],
             ['name' => 'Fireworks AI', 'slug' => 'fireworks-ai', 'affiliate_url' => 'https://fireworks.ai/'],
             ['name' => 'Replicate',    'slug' => 'replicate',    'affiliate_url' => 'https://replicate.com/'],
+            ['name' => 'Stability AI', 'slug' => 'stability-ai', 'affiliate_url' => 'https://platform.stability.ai/'],
+            ['name' => 'Midjourney',   'slug' => 'midjourney',   'affiliate_url' => 'https://www.midjourney.com/'],
+            ['name' => 'Runway',       'slug' => 'runway',       'affiliate_url' => 'https://runwayml.com/'],
+            ['name' => 'ElevenLabs',   'slug' => 'elevenlabs',   'affiliate_url' => 'https://elevenlabs.io/'],
+            ['name' => 'Hugging Face', 'slug' => 'hugging-face', 'affiliate_url' => 'https://huggingface.co/'],
+            ['name' => 'Ideogram',     'slug' => 'ideogram',     'affiliate_url' => 'https://ideogram.ai/'],
         ];
 
         foreach ($providers as $provider) {

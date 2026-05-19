@@ -8,6 +8,15 @@
             <p class="mt-1 text-xs text-gray-400">{{ $model->provider->name }}</p>
         </div>
         <div class="flex flex-col items-end gap-1">
+            <span class="rounded-full px-2 py-0.5 text-[10px] font-medium
+                {{ $model->category === 'image' ? 'bg-purple-500/10 text-purple-400' : '' }}
+                {{ $model->category === 'video' ? 'bg-red-500/10 text-red-400' : '' }}
+                {{ $model->category === 'audio' ? 'bg-blue-500/10 text-blue-400' : '' }}
+                {{ $model->category === 'open-source' ? 'bg-orange-500/10 text-orange-400' : '' }}
+                {{ $model->category === 'embedding' ? 'bg-cyan-500/10 text-cyan-400' : '' }}
+                {{ $model->category === 'text' ? 'bg-gray-700 text-gray-300' : '' }}">
+                {{ match($model->category) {'text' => 'Text', 'image' => 'Image', 'video' => 'Video', 'audio' => 'Audio', 'embedding' => 'Embed', 'open-source' => 'OpenSrc', default => $model->category} }}
+            </span>
             @if(isset($highlight))
                 <span class="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-400">{{ $highlight }}</span>
             @endif

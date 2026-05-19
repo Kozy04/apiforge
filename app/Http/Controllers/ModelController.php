@@ -15,12 +15,20 @@ class ModelController extends Controller
         ]);
     }
 
-    public function index()
+    public function index(?string $category = null)
     {
-        $models = ApiModel::with('provider')->orderBy('name')->get();
+        $query = ApiModel::byCategory($category)->with('provider');
+        $models = $query->orderBy('name')->get();
+
+        $categories = ApiModel::select('category')
+            ->distinct()
+            ->pluck('category')
+            ->toArray();
 
         return view('model.index', [
             'models' => $models,
+            'activeCategory' => $category,
+            'categories' => $categories,
         ]);
     }
 }

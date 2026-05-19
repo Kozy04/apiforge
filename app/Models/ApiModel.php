@@ -10,6 +10,7 @@ class ApiModel extends Model
         'provider_id', 'name', 'slug',
         'input_cost_per_m', 'output_cost_per_m',
         'context_window', 'latency_score', 'last_updated',
+        'category',
     ];
 
     protected $casts = [
@@ -57,5 +58,23 @@ class ApiModel extends Model
     {
         return ($tokens * 0.7 / 1_000_000 * $this->input_cost_per_m)
              + ($tokens * 0.3 / 1_000_000 * $this->output_cost_per_m);
+    }
+
+    public function scopeByCategory($query, ?string $category)
+    {
+        return $category ? $query->where('category', $category) : $query;
+    }
+
+    public function categoryLabel(): string
+    {
+        return match($this->category) {
+            'text' => 'Text Generation',
+            'image' => 'Image Generation',
+            'video' => 'Video Generation',
+            'audio' => 'Speech & Audio',
+            'embedding' => 'Embeddings',
+            'open-source' => 'Open Source',
+            default => ucfirst($this->category),
+        };
     }
 }

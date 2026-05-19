@@ -1,20 +1,49 @@
 @extends('layouts.app')
 
-@section('title', 'AI Model API Pricing — Live Cost Calculator')
-@section('meta_desc', 'Compare 28 AI model APIs across 10 providers. Live pricing, cost calculator, side-by-side comparisons. Find the cheapest LLM for your budget.')
+@section('title', $activeCategory ? ucfirst($activeCategory) . ' AI Models — Pricing & Comparison' : 'AI Model API Pricing — Live Cost Calculator')
+@section('meta_desc', $activeCategory ? "Compare " . ucfirst($activeCategory) ." AI model API pricing. Live cost calculator, side-by-side comparisons." : 'Compare 28+ AI model APIs across 16 providers. Live pricing, cost calculator, side-by-side comparisons.')
 
 @section('content')
 <section class="mx-auto max-w-7xl px-4 py-12 sm:px-6">
     <div class="mb-10 text-center">
         <h1 class="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
-            AI Model API <span class="text-emerald-400">Pricing</span>
+            @if($activeCategory)
+                {{ match($activeCategory) {
+                    'text' => 'Text Generation',
+                    'image' => 'Image Generation',
+                    'video' => 'Video Generation',
+                    'audio' => 'Speech & Audio',
+                    'embedding' => 'Embeddings',
+                    'open-source' => 'Open Source',
+                    default => ucfirst($activeCategory),
+                } }}
+            @else
+                AI Model API
+            @endif
+            <span class="text-emerald-400">Pricing</span>
         </h1>
         <p class="mt-4 text-lg text-gray-400 max-w-2xl mx-auto">
-            Compare costs per million tokens across 28 models and 10 providers. Use the live calculator to estimate your monthly spend.
+            @if($activeCategory)
+                Browse {{ $models->count() }} {{ match($activeCategory) {'text' => 'text', 'image' => 'image', 'video' => 'video', 'audio' => 'speech/audio', 'embedding' => 'embedding', 'open-source' => 'open-source', default => ''} }} generation models.
+            @else
+                Compare costs across {{ $models->count() }} models and 16 providers. Use the live calculator to estimate your monthly spend.
+            @endif
         </p>
     </div>
 
     <x-search />
+
+    <div class="mt-6 flex flex-wrap justify-center gap-2">
+        <a href="{{ url('/') }}" class="rounded-full px-4 py-2 text-sm font-medium transition {{ !$activeCategory ? 'bg-emerald-500 text-black' : 'bg-gray-800 text-gray-300 hover:bg-gray-700' }}">
+            All ({{ App\Models\ApiModel::count() }})
+        </a>
+        @foreach($categories as $cat)
+            <a href="{{ route('category.show', $cat) }}" class="rounded-full px-4 py-2 text-sm font-medium transition flex items-center gap-1.5 {{ $activeCategory === $cat ? 'bg-emerald-500 text-black' : 'bg-gray-800 text-gray-300 hover:bg-gray-700' }}">
+                {{ match($cat) {'text' => 'Text', 'image' => 'Image', 'video' => 'Video', 'audio' => 'Audio', 'embedding' => 'Embeddings', 'open-source' => 'Open Source', default => ucfirst($cat)} }}
+                <span class="text-xs opacity-60">({{ App\Models\ApiModel::where('category', $cat)->count() }})</span>
+            </a>
+        @endforeach
+    </div>
 
     @php
     $cheapest = $models->sortBy('input_cost_per_m')->take(3);
