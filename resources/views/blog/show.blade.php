@@ -89,18 +89,20 @@ $relatedPosts = \App\Models\BlogPost::published()
 
             <div class="prose prose-lg prose-invert max-w-none
                 prose-headings:text-white prose-headings:font-bold prose-headings:tracking-tight
-                prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-4 prose-h2:pb-2 prose-h2:border-b prose-h2:border-gray-800
-                prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3
-                prose-h4:text-lg prose-h4:mt-6 prose-h4:mb-2 prose-h4:text-emerald-400
-                prose-p:text-gray-300 prose-p:leading-relaxed prose-p:mb-5 prose-p:text-[1.05rem]
+                prose-h2:text-2xl prose-h2:mt-16 prose-h2:mb-6 prose-h2:pb-3 prose-h2:border-b prose-h2:border-gray-800
+                prose-h3:text-xl prose-h3:mt-12 prose-h3:mb-5
+                prose-h4:text-lg prose-h4:mt-10 prose-h4:mb-3 prose-h4:text-emerald-400
+                prose-p:text-gray-300 prose-p:leading-relaxed prose-p:mb-6 prose-p:text-[1.05rem]
                 prose-a:text-emerald-400 prose-a:no-underline hover:prose-a:underline prose-a:font-medium
-                prose-li:text-gray-300 prose-li:my-1
+                prose-li:text-gray-300 prose-li:my-2 prose-li:leading-relaxed
+                prose-ul:my-6 prose-ol:my-6
                 prose-strong:text-white prose-strong:font-semibold
-                prose-blockquote:border-emerald-500 prose-blockquote:bg-gray-900/50 prose-blockquote:py-3 prose-blockquote:px-5 prose-blockquote:rounded-r-lg prose-blockquote:text-gray-300 prose-blockquote:not-italic
+                prose-blockquote:border-emerald-500 prose-blockquote:bg-gray-900/50 prose-blockquote:py-4 prose-blockquote:px-6 prose-blockquote:rounded-r-lg prose-blockquote:text-gray-300 prose-blockquote:not-italic prose-blockquote:my-8
                 prose-code:text-emerald-300 prose-code:bg-gray-800 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:before:content-none prose-code:after:content-none
-                prose-pre:bg-gray-900 prose-pre:border prose-pre:border-gray-800 prose-pre:rounded-xl
-                prose-img:rounded-xl prose-img:border prose-img:border-gray-800
-                prose-table:border-separate prose-table:border-spacing-0 prose-table:w-full prose-table:rounded-xl prose-table:overflow-hidden
+                prose-pre:bg-gray-900 prose-pre:border prose-pre:border-gray-800 prose-pre:rounded-xl prose-pre:my-8
+                prose-img:rounded-xl prose-img:border prose-img:border-gray-800 prose-img:my-8
+                prose-hr:border-gray-800 prose-hr:my-12
+                prose-table:border-separate prose-table:border-spacing-0 prose-table:w-full prose-table:rounded-xl prose-table:overflow-hidden prose-table:my-8
                 prose-thead:border-none
                 prose-th:border-b prose-th:border-gray-700 prose-th:bg-gray-900 prose-th:px-5 prose-th:py-3 prose-th:text-sm prose-th:font-semibold prose-th:text-white prose-th:text-left
                 prose-td:border-b prose-td:border-gray-800 prose-td:px-5 prose-td:py-3 prose-td:text-sm prose-td:text-gray-300
