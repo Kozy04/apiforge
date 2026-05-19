@@ -37,19 +37,22 @@ RSS_FEEDS = [
 ]
 
 PRICING_DATA = {
-    "GPT-4o":        ["OpenAI",    2.50, 10.00, 128000,  "gpt-4o"],
-    "GPT-4o mini":   ["OpenAI",    0.15, 0.60,  128000,  "gpt-4o-mini"],
-    "GPT-4.1":       ["OpenAI",    2.00, 8.00,  1000000, "gpt-4-1"],
-    "Claude 3.5 Sonnet": ["Anthropic", 3.00, 15.00, 200000, "claude-3-5-sonnet"],
-    "Claude 3.5 Haiku":  ["Anthropic", 0.80, 4.00,  200000, "claude-3-5-haiku"],
-    "Claude Opus 4":     ["Anthropic", 15.00,75.00, 200000, "claude-opus-4"],
-    "Claude Sonnet 4":   ["Anthropic", 3.00, 15.00, 200000, "claude-sonnet-4"],
-    "Gemini 2.5 Pro":   ["Google",   1.25, 10.00, 1000000, "gemini-2-5-pro"],
-    "Gemini 2.5 Flash": ["Google",   0.15, 0.60,  1000000, "gemini-2-5-flash"],
-    "Llama 3.3 70B":    ["Groq",     0.59, 0.79,  128000,  "llama-3-3-70b"],
-    "DeepSeek-V3":      ["DeepSeek", 0.27, 1.10,  128000,  "deepseek-v3"],
-    "Mistral Large":    ["Mistral",  2.00, 6.00,  128000,  "mistral-large"],
-    "Mistral Small":    ["Mistral",  0.20, 0.60,  32000,   "mistral-small"],
+    "GPT-4o":        ["OpenAI",    2.50, 10.00, 128000,  "gpt-4o", "text"],
+    "GPT-4o mini":   ["OpenAI",    0.15, 0.60,  128000,  "gpt-4o-mini", "text"],
+    "GPT-4.1":       ["OpenAI",    2.00, 8.00,  1000000, "gpt-4-1", "text"],
+    "Claude 3.5 Sonnet": ["Anthropic", 3.00, 15.00, 200000, "claude-3-5-sonnet", "text"],
+    "Claude 3.5 Haiku":  ["Anthropic", 0.80, 4.00,  200000, "claude-3-5-haiku", "text"],
+    "Gemini 2.5 Pro":   ["Google",   1.25, 10.00, 1000000, "gemini-2-5-pro", "text"],
+    "Gemini 2.5 Flash": ["Google",   0.15, 0.60,  1000000, "gemini-2-5-flash", "text"],
+    "Llama 3.3 70B":    ["Groq",     0.59, 0.79,  128000,  "llama-3-3-70b", "open-source"],
+    "DeepSeek-V3":      ["DeepSeek", 0.27, 1.10,  128000,  "deepseek-v3", "open-source"],
+    "Mistral Large":    ["Mistral",  2.00, 6.00,  128000,  "mistral-large", "text"],
+    "Mistral Small":    ["Mistral",  0.20, 0.60,  32000,   "mistral-small", "text"],
+    "DALL-E 3":         ["OpenAI",   0.00, 0.04,  0,       "dall-e-3", "image"],
+    "Flux Pro":         ["Replicate",0.00, 0.003, 0,       "flux-pro", "image"],
+    "SD 3.5":           ["Stability",0.00, 0.004, 0,       "stable-diffusion-3-5", "image"],
+    "Eleven Turbo 2.5": ["ElevenLabs",0.00,0.005, 0,       "eleven-turbo-2-5", "audio"],
+    "Gen-3 Alpha":      ["Runway",   0.00, 0.10,  0,       "gen-3-alpha", "video"],
 }
 
 
