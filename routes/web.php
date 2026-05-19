@@ -5,6 +5,7 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CompareController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\ModelController;
+use App\Http\Controllers\ProviderController;
 use App\Http\Controllers\TrackClickController;
 use Illuminate\Support\Facades\Route;
 
@@ -37,3 +38,6 @@ Route::get('/robots.txt', function () {
 
 Route::get('/blog', [BlogController::class, 'index'])->name('blog.index');
 Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
+
+Route::get('/providers', [ProviderController::class, 'index'])->name('provider.index');
+Route::get('/provider/{slug}', [ProviderController::class, 'show'])->name('provider.show');

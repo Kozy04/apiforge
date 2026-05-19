@@ -30,6 +30,7 @@
                 </a>
                 <div class="hidden md:flex items-center gap-6 text-sm text-gray-300">
                     <a href="{{ url('/') }}" class="hover:text-white transition">All Models</a>
+                    <a href="{{ route('provider.index') }}" class="hover:text-white transition">Providers</a>
                     <a href="{{ route('blog.index') }}" class="hover:text-white transition">Blog</a>
                 </div>
                 <div class="md:hidden">
@@ -42,8 +43,38 @@
             @yield('content')
         </main>
 
-        <footer class="border-t border-gray-800 bg-gray-900 py-8 text-center text-sm text-gray-500">
-            <p>&copy; {{ date('Y') }} APIForge. AI model pricing data updated weekly.</p>
+        <footer class="border-t border-gray-800 bg-gray-900">
+            <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6">
+                <div class="grid gap-8 sm:grid-cols-3">
+                    <div>
+                        <h4 class="text-sm font-semibold text-white uppercase tracking-wide">APIForge</h4>
+                        <ul class="mt-3 space-y-2 text-sm text-gray-400">
+                            <li><a href="{{ url('/') }}" class="hover:text-white transition">All Models</a></li>
+                            <li><a href="{{ route('provider.index') }}" class="hover:text-white transition">Providers</a></li>
+                            <li><a href="{{ route('blog.index') }}" class="hover:text-white transition">Blog</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-semibold text-white uppercase tracking-wide">Top Models</h4>
+                        <ul class="mt-3 space-y-2 text-sm text-gray-400">
+                            <li><a href="{{ route('model.show', 'gpt-4o') }}" class="hover:text-white transition">GPT-4o</a></li>
+                            <li><a href="{{ route('model.show', 'claude-3-5-sonnet') }}" class="hover:text-white transition">Claude 3.5 Sonnet</a></li>
+                            <li><a href="{{ route('model.show', 'gemini-2-5-pro') }}" class="hover:text-white transition">Gemini 2.5 Pro</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-semibold text-white uppercase tracking-wide">Popular Comparisons</h4>
+                        <ul class="mt-3 space-y-2 text-sm text-gray-400">
+                            <li><a href="{{ route('compare.show', ['model_one' => 'gpt-4o', 'model_two' => 'claude-3-5-sonnet']) }}" class="hover:text-white transition">GPT-4o vs Claude</a></li>
+                            <li><a href="{{ route('compare.show', ['model_one' => 'gemini-2-5-pro', 'model_two' => 'gpt-4o']) }}" class="hover:text-white transition">Gemini vs GPT-4o</a></li>
+                            <li><a href="{{ route('compare.show', ['model_one' => 'gpt-4o', 'model_two' => 'gpt-4o-mini']) }}" class="hover:text-white transition">GPT-4o vs GPT-4o mini</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="mt-8 pt-6 border-t border-gray-800 text-center text-xs text-gray-600">
+                    <p>&copy; {{ date('Y') }} APIForge. AI model pricing data updated weekly. <a href="{{ url('/sitemap.xml') }}" class="hover:text-gray-400">Sitemap</a></p>
+                </div>
+            </div>
         </footer>
     </div>
 

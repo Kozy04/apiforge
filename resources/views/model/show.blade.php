@@ -80,6 +80,8 @@
         </div>
     </div>
 
+    @include('partials.faq')
+
     <div class="mt-10 rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-6 text-center">
         <h3 class="text-lg font-semibold text-white">Ready to use {{ $model->name }}?</h3>
         <p class="mt-1 text-gray-400">Sign up through {{ $model->provider->name }} and start building today.</p>
