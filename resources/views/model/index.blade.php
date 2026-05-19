@@ -46,6 +46,30 @@
     </div>
 
     @php
+    $sponsored = collect(explode(',', env('SPONSORED_PROVIDERS', '')))
+        ->filter()
+        ->map(fn($s) => App\Models\Provider::where('slug', trim($s))->first())
+        ->filter();
+    @endphp
+    @if($sponsored->isNotEmpty())
+    <div class="mt-10">
+        <div class="flex items-center gap-2 mb-5">
+            <h2 class="text-xl font-bold text-white">Featured Providers</h2>
+            <span class="rounded-full bg-amber-500/10 px-2.5 py-0.5 text-[10px] font-medium text-amber-400 uppercase tracking-wide">Sponsored</span>
+        </div>
+        <div class="grid gap-4 sm:grid-cols-3">
+            @foreach($sponsored as $sp)
+                <a href="{{ route('provider.show', $sp) }}" class="group block rounded-xl border border-amber-500/30 bg-gradient-to-br from-amber-500/5 to-gray-900 p-5 hover:border-amber-500/50 transition ring-1 ring-amber-500/10">
+                    <h3 class="font-semibold text-white group-hover:text-amber-400 transition">{{ $sp->name }}</h3>
+                    <p class="mt-1 text-xs text-gray-400">{{ $sp->apiModels->count() }} models</p>
+                    <p class="mt-3 text-xs text-gray-500 line-clamp-2">{{ $sp->affiliate_url }}</p>
+                </a>
+            @endforeach
+        </div>
+    </div>
+    @endif
+
+    @php
     $cheapest = $models->sortBy('input_cost_per_m')->take(3);
     $recent = $models->filter->isRecentlyUpdated()->take(3);
     $fastest = $models->sortBy('latency_score')->take(3);

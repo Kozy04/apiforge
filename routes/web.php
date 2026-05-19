@@ -43,3 +43,5 @@ Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blog.show');
 
 Route::get('/providers', [ProviderController::class, 'index'])->name('provider.index');
 Route::get('/provider/{slug}', [ProviderController::class, 'show'])->name('provider.show');
+
+Route::get('/advertise', fn () => view('advertise'))->name('advertise');

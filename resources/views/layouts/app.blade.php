@@ -52,6 +52,7 @@
                             <li><a href="{{ url('/') }}" class="hover:text-white transition">All Models</a></li>
                             <li><a href="{{ route('provider.index') }}" class="hover:text-white transition">Providers</a></li>
                             <li><a href="{{ route('blog.index') }}" class="hover:text-white transition">Blog</a></li>
+                            <li><a href="{{ route('advertise') }}" class="hover:text-white transition">Advertise</a></li>
                         </ul>
                     </div>
                     <div>
